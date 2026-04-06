@@ -1,10 +1,14 @@
-import { Search, MapPin, Star, ChevronRight } from 'lucide-react';
+import { Search, MapPin, Star, ChevronRight, Calendar, SlidersHorizontal } from 'lucide-react';
+import { useState } from 'react';
 
 interface BusinessesProps {
   onSelectBusiness: (business: any) => void;
 }
 
 export function Businesses({ onSelectBusiness }: BusinessesProps) {
+  const [selectedLocation, setSelectedLocation] = useState('Current Location');
+  const [showFilters, setShowFilters] = useState(false);
+
   const businesses = [
     {
       id: 1,
@@ -17,7 +21,8 @@ export function Businesses({ onSelectBusiness }: BusinessesProps) {
       image: '💈',
       services: ['Haircut', 'Beard Trim', 'Hot Towel Shave'],
       avgDuration: 30,
-      reminderInterval: 30
+      reminderInterval: 30,
+      availableSlots: ['Today 2:00 PM', 'Today 4:30 PM', 'Tomorrow 10:00 AM']
     },
     {
       id: 2,
@@ -30,7 +35,8 @@ export function Businesses({ onSelectBusiness }: BusinessesProps) {
       image: '💇‍♀️',
       services: ['Cut & Style', 'Color', 'Highlights', 'Treatment'],
       avgDuration: 90,
-      reminderInterval: 60
+      reminderInterval: 60,
+      availableSlots: ['Tomorrow 9:00 AM', 'Tomorrow 1:00 PM', 'Wed 11:00 AM']
     },
     {
       id: 3,
@@ -43,7 +49,8 @@ export function Businesses({ onSelectBusiness }: BusinessesProps) {
       image: '🧖‍♀️',
       services: ['Massage', 'Facial', 'Couples Massage', 'Manicure'],
       avgDuration: 60,
-      reminderInterval: 90
+      reminderInterval: 90,
+      availableSlots: ['Today 5:00 PM', 'Tomorrow 3:00 PM', 'Thu 1:00 PM']
     },
     {
       id: 4,
@@ -56,7 +63,8 @@ export function Businesses({ onSelectBusiness }: BusinessesProps) {
       image: '🔧',
       services: ['Oil Change', 'Tire Rotation', 'Brake Service', 'Inspection'],
       avgDuration: 45,
-      reminderInterval: 180
+      reminderInterval: 180,
+      availableSlots: ['Today 8:00 AM', 'Today 12:00 PM', 'Tomorrow 9:00 AM']
     },
     {
       id: 5,
@@ -69,7 +77,8 @@ export function Businesses({ onSelectBusiness }: BusinessesProps) {
       image: '✂️',
       services: ['Haircut', 'Fade', 'Line Up', 'Kids Cut'],
       avgDuration: 30,
-      reminderInterval: 30
+      reminderInterval: 30,
+      availableSlots: ['Today 3:00 PM', 'Tomorrow 11:00 AM', 'Tomorrow 2:00 PM']
     },
     {
       id: 6,
@@ -82,7 +91,8 @@ export function Businesses({ onSelectBusiness }: BusinessesProps) {
       image: '💅',
       services: ['Manicure', 'Pedicure', 'Gel Nails', 'Nail Art'],
       avgDuration: 60,
-      reminderInterval: 21
+      reminderInterval: 21,
+      availableSlots: ['Today 1:00 PM', 'Tomorrow 10:00 AM', 'Tomorrow 4:00 PM']
     }
   ];
 
@@ -92,19 +102,55 @@ export function Businesses({ onSelectBusiness }: BusinessesProps) {
     <div className="p-4 space-y-4 pb-20">
       {/* Header */}
       <div className="pt-4">
-        <h1 className="mb-1">Find Businesses</h1>
-        <p className="text-muted-foreground">Book your next appointment</p>
+        <h1 className="mb-1">Find & Book</h1>
+        <p className="text-muted-foreground">Search businesses in your area</p>
       </div>
 
-      {/* Search */}
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-        <input
-          type="text"
-          placeholder="Search services..."
-          className="w-full pl-10 pr-4 py-3 bg-input-background rounded-lg outline-none focus:ring-2 focus:ring-primary"
-        />
+      {/* Location Selector */}
+      <button className="w-full bg-card border border-border rounded-lg p-3 flex items-center gap-2 text-left">
+        <MapPin className="w-5 h-5 text-primary" />
+        <div className="flex-1">
+          <p className="text-sm text-muted-foreground">Location</p>
+          <p>{selectedLocation}</p>
+        </div>
+        <ChevronRight className="w-5 h-5 text-muted-foreground" />
+      </button>
+
+      {/* Search & Filters */}
+      <div className="flex gap-2">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+          <input
+            type="text"
+            placeholder="Search services..."
+            className="w-full pl-10 pr-4 py-3 bg-input-background rounded-lg outline-none focus:ring-2 focus:ring-primary"
+          />
+        </div>
+        <button
+          onClick={() => setShowFilters(!showFilters)}
+          className="bg-card border border-border p-3 rounded-lg"
+        >
+          <SlidersHorizontal className="w-5 h-5" />
+        </button>
       </div>
+
+      {/* Filters Panel */}
+      {showFilters && (
+        <div className="bg-card border border-border rounded-xl p-4 space-y-3">
+          <h3>Availability</h3>
+          <div className="flex gap-2">
+            <button className="px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm">
+              Today
+            </button>
+            <button className="px-4 py-2 rounded-lg bg-secondary text-secondary-foreground text-sm">
+              Tomorrow
+            </button>
+            <button className="px-4 py-2 rounded-lg bg-secondary text-secondary-foreground text-sm">
+              This Week
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Categories */}
       <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
@@ -142,18 +188,15 @@ export function Businesses({ onSelectBusiness }: BusinessesProps) {
                 <span className="text-muted-foreground">•</span>
                 <span className="text-sm text-muted-foreground">{business.category}</span>
               </div>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
                 <MapPin className="w-4 h-4" />
                 <span>{business.address}</span>
                 <span>•</span>
                 <span>{business.distance}</span>
               </div>
-              <div className="mt-2 flex flex-wrap gap-1">
-                {business.services.slice(0, 3).map((service, idx) => (
-                  <span key={idx} className="text-xs bg-secondary px-2 py-1 rounded">
-                    {service}
-                  </span>
-                ))}
+              <div className="flex items-center gap-2 text-sm text-green-600">
+                <Calendar className="w-4 h-4" />
+                <span>Available: {business.availableSlots[0]}</span>
               </div>
             </div>
             <ChevronRight className="w-5 h-5 text-muted-foreground flex-shrink-0 self-center" />

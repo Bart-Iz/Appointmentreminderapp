@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Home } from './components/Home';
 import { Businesses } from './components/Businesses';
 import { History } from './components/History';
 import { Profile } from './components/Profile';
 import { BookingFlow } from './components/BookingFlow';
+import { ReminderNotification } from './components/ReminderNotification';
 import { Calendar, Clock, User, Home as HomeIcon } from 'lucide-react';
 
 export default function App() {
@@ -14,6 +15,43 @@ export default function App() {
     gender: 'male',
     phone: '+1 (555) 123-4567'
   });
+  const [activeReminder, setActiveReminder] = useState<any>(null);
+
+  // Simulate automatic reminders based on time and user profile
+  useEffect(() => {
+    // Check for reminders on mount
+    const checkReminders = () => {
+      const reminders = [
+        {
+          id: 1,
+          type: 'time-based',
+          business: 'Classic Cuts Barbershop',
+          message: "Hello! It's been a month since your last visit. Maybe it's time for a new haircut?",
+          lastVisit: '2026-03-06',
+          daysAgo: 31,
+          shouldShow: true // Based on business type (barber = 30 days) and days since last visit
+        },
+        {
+          id: 2,
+          type: 'seasonal',
+          business: 'Serenity Spa & Wellness',
+          message: "Valentine's Day is coming up! Book a couples massage for you and your partner.",
+          occasion: "Valentine's Day",
+          shouldShow: userProfile.gender === 'male' // Only show to male users
+        }
+      ];
+
+      const reminderToShow = reminders.find(r => r.shouldShow);
+      if (reminderToShow) {
+        // Show reminder after 2 seconds (simulating app opening)
+        setTimeout(() => {
+          setActiveReminder(reminderToShow);
+        }, 2000);
+      }
+    };
+
+    checkReminders();
+  }, [userProfile.gender]);
 
   const renderScreen = () => {
     if (selectedBusiness) {
@@ -28,7 +66,13 @@ export default function App() {
 
     switch (activeTab) {
       case 'home':
-        return <Home onBookNow={() => setActiveTab('businesses')} />;
+        return (
+          <Home
+            onBookNow={() => setActiveTab('businesses')}
+            onCategorySelect={() => setActiveTab('businesses')}
+            onBusinessSelect={setSelectedBusiness}
+          />
+        );
       case 'businesses':
         return <Businesses onSelectBusiness={setSelectedBusiness} />;
       case 'history':
@@ -36,12 +80,32 @@ export default function App() {
       case 'profile':
         return <Profile profile={userProfile} onUpdateProfile={setUserProfile} />;
       default:
-        return <Home onBookNow={() => setActiveTab('businesses')} />;
+        return (
+          <Home
+            onBookNow={() => setActiveTab('businesses')}
+            onCategorySelect={() => setActiveTab('businesses')}
+            onBusinessSelect={setSelectedBusiness}
+          />
+        );
     }
+  };
+
+  const handleReminderBookNow = () => {
+    setActiveReminder(null);
+    setActiveTab('businesses');
   };
 
   return (
     <div className="size-full flex flex-col bg-background max-w-md mx-auto">
+      {/* Automatic Reminder Notification */}
+      {activeReminder && (
+        <ReminderNotification
+          reminder={activeReminder}
+          onDismiss={() => setActiveReminder(null)}
+          onBookNow={handleReminderBookNow}
+        />
+      )}
+
       {/* Main Content */}
       <div className="flex-1 overflow-y-auto">
         {renderScreen()}
