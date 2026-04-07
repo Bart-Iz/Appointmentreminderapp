@@ -2,7 +2,6 @@
 
 A mobile-style web app for discovering local businesses, booking appointments, and viewing simulated reminder notifications. The UI is based on a [Figma design](https://www.figma.com/design/ofv7pHZX6FAAyMJxeDNVFH/Appointment-Reminder-App).
 
-**Repository:** [github.com/Bart-Iz/Appointmentreminderapp](https://github.com/Bart-Iz/Appointmentreminderapp)
 
 ## Tech stack
 
@@ -61,4 +60,5 @@ Live URL:
 ## License
 
 See [ATTRIBUTIONS.md](ATTRIBUTIONS.md) for third-party notices.
+
 
