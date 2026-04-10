@@ -1,4 +1,4 @@
-﻿# Appointment Reminder App
+﻿# Appointment App
 
 A mobile-style web app for discovering local businesses, booking appointments, and viewing simulated reminder notifications. The UI is based on a [Figma design](https://www.figma.com/design/ofv7pHZX6FAAyMJxeDNVFH/Appointment-Reminder-App).
 
