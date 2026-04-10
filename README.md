@@ -57,6 +57,8 @@ Live URL:
 - `src/app/components/` - screens (`Home`, `Businesses`, `BookingFlow`, `History`, `Profile`, ...)
 - `src/app/components/ui/` - shared UI primitives
 
+## User Case study is in .pdf file
+
 ## License
 
 See [ATTRIBUTIONS.md](ATTRIBUTIONS.md) for third-party notices.
